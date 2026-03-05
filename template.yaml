@@ -1,0 +1,86 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Task Management API - Tối ưu với Globals và Block Style
+
+Globals:
+  Function:
+    Runtime: nodejs20.x
+    CodeUri: src/
+    Timeout: 10
+    Environment:
+      Variables:
+        TABLE_NAME: !Ref TasksTable
+
+Resources:
+  TasksTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: MySimpleTasks
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+      BillingMode: PAY_PER_REQUEST
+
+  CreateTaskFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: create.handler
+      Policies:
+        - DynamoDBWritePolicy:
+            TableName: !Ref TasksTable
+      Events:
+        CreateApi:
+          Type: Api
+          Properties:
+            Path: /tasks
+            Method: post
+
+  GetAllTasksFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: get-all.handler
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: !Ref TasksTable
+      Events:
+        GetAllApi:
+          Type: Api
+          Properties:
+            Path: /tasks
+            Method: get
+
+  GetTaskByIdFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: get-by-id.handler
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: !Ref TasksTable
+      Events:
+        GetByIdApi:
+          Type: Api
+          Properties:
+            Path: /tasks/{id}
+            Method: get
+
+  DeleteTaskFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: delete.handler
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref TasksTable
+      Events:
+        DeleteApi:
+          Type: Api
+          Properties:
+            Path: /tasks/{id}
+            Method: delete
+
+Outputs:
+  ApiUrl:
+    Description: "Địa chỉ gốc của API"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/tasks"
