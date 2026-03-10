@@ -46,7 +46,7 @@ Ensure you have the AWS SAM CLI and Node.js installed.
 npm install
 ```
 # 3. Deployment with AWS SAM
-## 3.1. Build: `sam build -t sam build -t infrastructure/template.yaml`
+## 3.1. Build: `sam build -t infrastructure/template.yaml`
 ## 3.2. Deploy
 ### First Time: `sam deploy --guided`
 Key Configuration Options:
