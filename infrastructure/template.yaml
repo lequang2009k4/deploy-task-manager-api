@@ -30,9 +30,12 @@ Resources:
     Type: AWS::Serverless::Function # A Lambda entity supported by SAM
     Properties:
       Handler: src/handlers/createTask.handler   # Execution entry point: find create.js and call the handler function
-      Policies:
-        - DynamoDBWritePolicy:  # Permissions - Allows Create functions to write data
-            TableName: !Ref TasksTable  # Grant permissions specifically for the TasksTable defined above
+      Policies: #Translate from group to granular actions
+        - Statement:
+            - Effect: Allow
+              Action:
+                - "dynamodb:PutItem"
+              Resource: !GetAtt TasksTable.Arn #Request arn(amazon resource name)- string id about region $ account, example: arn:aws:dynamodb:ap-southeast-1:123456789:table/MySimpleTasks
       Events:
         CreateApi:
           Type: Api  # Creates an HTTP API endpoint to route requests to this Lambda
@@ -45,9 +48,12 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: src/handlers/getAllTasks.handler
-      Policies: # Read-only permission
-        - DynamoDBReadPolicy:
-            TableName: !Ref TasksTable
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - "dynamodb:Scan"
+              Resource: !GetAtt TasksTable.Arn
       Events:  # Where SAM automatically creates the API Gateway
         GetAllApi:
           Type: Api
@@ -61,8 +67,11 @@ Resources:
     Properties:
       Handler: src/handlers/getTaskById.handler
       Policies:
-        - DynamoDBReadPolicy:
-            TableName: !Ref TasksTable
+        - Statement:
+            - Effect: Allow
+              Action:
+                - "dynamodb:GetItem"
+              Resource: !GetAtt TasksTable.Arn
       Events:
         GetByIdApi:
           Type: Api
@@ -76,8 +85,12 @@ Resources:
     Properties:
       Handler: src/handlers/deleteTask.handler
       Policies:
-        - DynamoDBCrudPolicy:
-            TableName: !Ref TasksTable
+        - Statement:
+            - Effect: Allow
+              Action:
+                - "dynamodb:GetItem"
+                - "dynamodb:DeleteItem"
+              Resource: !GetAtt TasksTable.Arn
       Events:
         DeleteApi:
           Type: Api
