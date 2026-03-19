@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        description: 'Choose environment: ( Dev/UAT)'
+        description: 'Choose environment( dev/uat): '
         required: true
         default: 'dev'
         type: choice
