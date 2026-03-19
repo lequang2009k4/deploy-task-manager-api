@@ -3,7 +3,6 @@ name: CI - Pull Request Checker
 on:
   pull_request:
     branches: [main] 
-  # Cho phép các workflow khác (như Deploy) gọi lại logic này
   workflow_call:
 
 jobs:
@@ -13,13 +12,6 @@ jobs:
       # Bước 1: Clone code
       - name: Checkout code
         uses: actions/checkout@v3
-
-      # Bước 2: Cài đặt Node.js 20
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20
-          cache: 'npm'
 
       # Bước 3: Cài đặt thư viện
       # Dùng 'npm ci' thay vì 'install' trên CI để đảm bảo version đồng nhất từ package-lock.json
