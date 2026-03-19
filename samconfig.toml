@@ -25,3 +25,16 @@ parameter_overrides = "Env=\"uat\""
 
 [uat.global.parameters]
 region = "ap-southeast-1"
+
+# --- CONFIG FOR PRODUCTION ---
+[prod.deploy.parameters]
+stack_name = "task-manager-api-prod"
+s3_prefix = "task-manager-api-prod"
+resolve_s3 = true
+region = "ap-southeast-1"
+confirm_changeset = false
+capabilities = "CAPABILITY_IAM"
+parameter_overrides = "Env=\"prod\""
+
+[prod.global.parameters]
+region = "ap-southeast-1"
