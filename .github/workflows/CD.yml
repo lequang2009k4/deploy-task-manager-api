@@ -1,15 +1,16 @@
+name: CD
 on:
   push:
     branches: [main]
 
 jobs:
-  # GỌI LẠI FILE CI: Không cần viết lại các bước install/test nữa
+  # Call CI
   call-ci:
     uses: ./.github/workflows/CI.yml
 
-  # CHỈ DEPLOY KHI CI PASS
+  # DEPLOY WHEN CI PASS
   deploy:
-    needs: call-ci # Đợi CI chạy xong và pass
+    needs: call-ci # wait CI run and pass
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code

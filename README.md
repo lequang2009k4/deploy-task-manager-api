@@ -9,45 +9,47 @@ cd serverless-task-manager-api
 ## Project Structure
 ```
 serverless-task-manager-api/
-│
 ├── src/
-│   ├── handlers/                 # Lambda entry points
-│   │   ├── createTask.js
+│   ├── handlers/                # Lambda Entry Points 
+│   │   ├── createTask.js        
 │   │   ├── getAllTasks.js
 │   │   ├── getTaskById.js
 │   │   └── deleteTask.js
 │   │
-│   ├── services/                 # Business logic
-│   │   └── taskService.js
+│   ├── services/                # Business Logic Layer
+│   │   └── taskService.js       
 │   │
-│   ├── repositories/             # Data access layer
-│   │   └── taskRepository.js
+│   ├── repositories/            # Data Access Layer
+│   │   └── taskRepository.js    
 │   │
-│   ├── models/                   # Data model
-│   │   └── taskModel.js
+│   ├── models/                  # Data Models 
+│   │   └── taskModel.js         
 │   │
-│   ├── utils/                    # Helper functions
-│   │   ├── response.js
-│   │   └── validator.js
+│   ├── utils/                   # Shared Utilities & Helpers
+│   │   ├── response.js          # Standardizes API responses 
+│   │   └── validator.js         # Input validation logic
 │   │
-│   └── config/
-│       └── dynamoClient.js
+│   └── config/                  # Configuration & Clients
+│       └── dynamoClient.js      # AWS SDK DynamoDB client initialization
 │
-├── infrastructure/               # IaC
-│   └── template.yaml             # SAM template
+├── tests/
+│   └── units/                   # Unit Testing
+│       └── handlers/            # Tests for Lambda entry points
+│           ├── createTask.test.js
+│           ├── getAllTasks.test.js
+│           ├── getTaskById.test.js
+│           └── deleteTask.test.js
 │
+├── infrastructure/              # Infrastructure as Code (IaC)
+│   └── template.yaml            # AWS SAM template
 │
-├── package.json
-└── README.md
+├── package.json                 # Project dependencies and scripts
+└── README.md                    # Project documentation & deployment guide
 ```
-# 2. Prerequisites & Installation
-Ensure you have the AWS SAM CLI and Node.js installed.
-```
-npm install
-```
-# 3. Deployment with AWS SAM
-## 3.1. Build: `sam build -t infrastructure/template.yaml`
-## 3.2. Deploy
+
+# 2. Deployment with AWS SAM
+## 2.1. Build: `sam build -t infrastructure/template.yaml`
+## 2.2. Deploy
 ### First Time: `sam deploy --guided`
 Key Configuration Options:
 * Stack Name & Region: Define your preferred stack name and AWS region.
@@ -57,7 +59,7 @@ Key Configuration Options:
 * Authorization Warning: Since this demo does not include an Auth layer (e.g., Cognito), SAM will warn you for each function. Choose Y to proceed for demo purposes.
 * Save arguments to configuration file [Y/n]: Choose Y to save these settings to samconfig.toml for future use.
 ### Subsequent Deployments: `sam deploy`
-# 4. API Testing
+# 3. API Testing
 Once deployment is complete, the **ApiUrl** will be displayed in the Outputs section. Use the following curl commands to test your endpoints:
 |   API  | Command |
 | ------------- |-------------|

@@ -1,9 +1,9 @@
 import { jest } from '@jest/globals';
 
-// 1. Mock các dependencies với đúng tên hàm trong code thực tế
+// 1. Mock  dependencies with exactly name function in code handler 
 jest.unstable_mockModule('../../../src/services/taskService.js', () => ({
     taskService: { 
-        createNewTask: jest.fn() // Đổi từ createTask thành createNewTask
+        createNewTask: jest.fn() 
     }
 }));
 
@@ -50,7 +50,7 @@ describe('Handler: createTask', () => {
     });
 
     test('should return 400 when validation fails', async () => {
-        // Giả lập validator báo lỗi
+        // simulate validator notice error
         validator.validateCreateTask.mockReturnValue({ 
             isValid: false, 
             errors: "Title is required" 

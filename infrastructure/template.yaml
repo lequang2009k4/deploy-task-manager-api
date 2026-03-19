@@ -71,7 +71,7 @@ Resources:
           KeyType: HASH
       BillingMode: PAY_PER_REQUEST  # On-demand scaling (pay only for what you use)
   ##########################################################################
-  # 4. MONITORING DASHBOARD (Yêu cầu chính của Tuần 2)
+  # 4. MONITORING DASHBOARD
   ##########################################################################
   MainMonitoringDashboard:
     Type: AWS::CloudWatch::Dashboard

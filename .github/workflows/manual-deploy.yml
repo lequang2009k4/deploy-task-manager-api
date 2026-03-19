@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        description: 'Chọn môi trường để Deploy (Chỉ cho phép Dev/UAT)'
+        description: 'Choose environment: ( Dev/UAT)'
         required: true
         default: 'dev'
         type: choice
@@ -14,7 +14,7 @@ on:
 
 jobs:
   deploy:
-    # Thêm điều kiện: Chỉ chạy nếu KHÔNG PHẢI nhánh main
+    # Condition that not run on branch main
     if: github.ref != 'refs/heads/main'
     runs-on: ubuntu-latest
     

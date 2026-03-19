@@ -1,5 +1,4 @@
-name: CI - Pull Request Checker
-
+name: CI 
 on:
   pull_request:
     branches: [main] 
@@ -9,16 +8,13 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
     steps:
-      # Bước 1: Clone code
+      # Clone code
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Bước 3: Cài đặt thư viện
-      # Dùng 'npm ci' thay vì 'install' trên CI để đảm bảo version đồng nhất từ package-lock.json
+      # Install dependencies
       - name: Install dependencies
         run: npm install
 
-      # Bước 4: Chạy Unit Test (QUAN TRỌNG)
-      # Thêm biến NODE_OPTIONS để hỗ trợ Mocking ESM mà chúng ta đã viết
       - name: Run Unit Tests
         run: NODE_OPTIONS='--experimental-vm-modules' npm test

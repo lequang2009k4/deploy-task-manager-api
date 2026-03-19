@@ -3,7 +3,7 @@ import { jest } from '@jest/globals';
 // 1. Mock dependencies
 jest.unstable_mockModule('../../../src/services/taskService.js', () => ({
     taskService: { 
-        // Phải khớp với: await taskService.getTaskDetails(id)
+        // Must match: await taskService.getTaskDetails(id)
         getTaskDetails: jest.fn() 
     }
 }));
@@ -15,7 +15,7 @@ jest.unstable_mockModule('../../../src/utils/response.js', () => ({
     serverError: jest.fn((err) => ({ statusCode: 500, body: JSON.stringify({ error: err.message || err }) }))
 }));
 
-// 2. Import sau khi đã mock module
+// 2. Import after modules have been mocked
 const { handler } = await import('../../../src/handlers/getTaskById.js');
 const { taskService } = await import('../../../src/services/taskService.js');
 
@@ -43,7 +43,7 @@ describe('Handler: getTaskById', () => {
     });
 
     test('should return 400 if ID is missing in path parameters', async () => {
-        const event = { pathParameters: null }; // Hoặc không có id
+        const event = { pathParameters: null }; // Or missing id
         const result = await handler(event, mockContext);
 
         expect(result.statusCode).toBe(400);
@@ -51,7 +51,7 @@ describe('Handler: getTaskById', () => {
     });
 
     test('should return 404 if service throws "Not found" error', async () => {
-        // Giả lập lỗi ném ra từ Service layer theo đúng format code bạn check
+        // Simulate an error thrown from the Service layer matching your code's check format
         taskService.getTaskDetails.mockRejectedValue(new Error('Task Not found'));
 
         const event = { pathParameters: { id: '999' } };

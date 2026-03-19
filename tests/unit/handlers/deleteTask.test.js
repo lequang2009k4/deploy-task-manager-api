@@ -1,9 +1,9 @@
 import { jest } from '@jest/globals';
 
-// 1. Mock các module phụ thuộc
+// 1. Mock dependency modules
 jest.unstable_mockModule('../../../src/services/taskService.js', () => ({
     taskService: { 
-        // Khớp với logic: await taskService.removeTask(id)
+        // Matches logic: await taskService.removeTask(id)
         removeTask: jest.fn() 
     }
 }));
@@ -15,7 +15,7 @@ jest.unstable_mockModule('../../../src/utils/response.js', () => ({
     serverError: jest.fn((err) => ({ statusCode: 500, body: JSON.stringify({ error: err.message || err }) }))
 }));
 
-// 2. Nạp module sau khi đã chặn (mock)
+// 2. Load modules after intercepting (mocking)
 const { handler } = await import('../../../src/handlers/deleteTask.js');
 const { taskService } = await import('../../../src/services/taskService.js');
 
@@ -27,7 +27,7 @@ describe('Handler: deleteTask', () => {
     });
 
     test('should return 200 when task is deleted successfully', async () => {
-        // Giả lập xóa thành công (hàm removeTask thường không trả về gì hoặc trả về void)
+        // Simulate successful deletion (removeTask typically returns nothing or void)
         taskService.removeTask.mockResolvedValue(undefined);
 
         const event = { 
@@ -44,7 +44,7 @@ describe('Handler: deleteTask', () => {
     });
 
     test('should return 400 if ID is missing', async () => {
-        const event = { pathParameters: {} }; // Không có id
+        const event = { pathParameters: {} }; // Missing id
         const result = await handler(event, mockContext);
 
         expect(result.statusCode).toBe(400);
@@ -52,7 +52,7 @@ describe('Handler: deleteTask', () => {
     });
 
     test('should return 404 if task to delete does not exist', async () => {
-        // Giả lập service ném lỗi "Not found"
+        // Simulate service throwing a "Not found" error
         taskService.removeTask.mockRejectedValue(new Error('Task Not found'));
 
         const event = { pathParameters: { id: 'NON-EXISTENT' } };
