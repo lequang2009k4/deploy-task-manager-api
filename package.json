@@ -8,6 +8,7 @@
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.500.0",
     "@aws-sdk/lib-dynamodb": "^3.500.0",
+    "express": "^5.2.1",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
