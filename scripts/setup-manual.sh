@@ -29,7 +29,10 @@ fi
 # 3. PREPARE PROJECT DIRECTORY
 # $(pwd): Gets the absolute path of the current directory (where you are currently standing).
 # This makes the script flexible; the app works regardless of where you clone the code.
-PROJECT_DIR=$(pwd)
+PROJECT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
+#${BASH_SOURCE[0]}: path to file script on running, BASH_SOURCE is array contain all scripts is excuting on "stack"
+# dirname: folder contain script
+# ..: cd out  1 level
 echo "Working directory: $PROJECT_DIR"
 
 # npm install --omit=dev: Only installs essential libraries (dependencies).
@@ -44,7 +47,7 @@ echo "Please enter AWS configuration details:"
 read -p "1. Enter DynamoDB Table Name: " TABLE_NAME
 read -p "2. Enter AWS Region (default ap-southeast-1): " AWS_REGION
 
-# If the user leaves AWS_REGION blank, automatically use the default value.
+# If the user leaves AWS_REGION blank, automatically use the default valuee Parameter Expansion ( ${VAR:-default} )
 AWS_REGION=${AWS_REGION:-ap-southeast-1}
 echo "------------------------------------------------"
 
@@ -57,11 +60,13 @@ echo "Creating service file at: $SERVICE_FILE"
 # cat <<EOF: Writes the entire content between here and the 'EOF' tag into the destination file.
 cat <<EOF > $SERVICE_FILE
 [Unit]
+#basic infor
 Description=NodeJS Task Management API
 After=network.target
-
+#only run app when have succese network
 [Service]
-# User/Group: Runs the app as the actual user who invoked sudo (usually 'ubuntu').
+#config 
+
 # Avoid running as 'root' for better security (Principle of Least Privilege).
 User=$SUDO_USER
 Group=$(id -gn $SUDO_USER)
@@ -72,7 +77,7 @@ WorkingDirectory=$PROJECT_DIR
 # ExecStart: The main execution command to start the App.
 ExecStart=/usr/bin/node src/app.js
 
-# Environment: "Injects" environment variables into the application.
+# Environment: "Injects" environment variables into the application, app take thought process.env
 Environment=NODE_ENV=production
 Environment=PORT=3000
 Environment=TABLE_NAME=$TABLE_NAME
@@ -105,6 +110,7 @@ systemctl restart task-api
 echo "------------------------------------------------"
 echo "DEPLOYMENT RESULTS:"
 # is-active: Quickly checks if the app is 'active' (running) or 'inactive' (stopped).
-echo "- Status: \$(systemctl is-active task-api)"
+echo "- Status: $(systemctl is-active task-api)"
+# add \ when you want print $(systemctl is-active task-api)
 echo "- View logs: sudo journalctl -u task-api -f"
 echo "------------------------------------------------"
